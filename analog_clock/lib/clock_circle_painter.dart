@@ -35,8 +35,8 @@ class ClockCirclePainter extends CustomPainter {
     canvas.drawCircle(offset, _radius, paint);
   }
 
-  void drawHand(Canvas canvas, Size size, int angle, double stroke, double edge,
-      Color color) {
+  void drawHand(Canvas canvas, Size size, int angle, double stroke,
+      double innerRadius, double edge, Color color) {
     Paint paint = Paint();
     paint.style = PaintingStyle.fill;
     paint.color = color;
@@ -46,9 +46,11 @@ class ClockCirclePainter extends CustomPainter {
     var radius = (min(size.height, size.width) / 2) - edge;
     var centerY = size.height / 2;
     var centerX = size.width / 2;
-    var x = centerX + (radius * cos((angle - 90) * pi / 180));
-    var y = centerY + (radius * sin((angle - 90) * pi / 180));
-    canvas.drawLine(Offset(centerX, centerY), Offset(x, y), paint);
+    var x1 = centerX + (innerRadius * cos((angle - 90) * pi / 180));
+    var y1 = centerY + (innerRadius * sin((angle - 90) * pi / 180));
+    var x2 = centerX + (radius * cos((angle - 90) * pi / 180));
+    var y2 = centerY + (radius * sin((angle - 90) * pi / 180));
+    canvas.drawLine(Offset(x1, y1), Offset(x2, y2), paint);
   }
 
   void drawContanerCircle(Canvas canvas, Size size) {
@@ -59,13 +61,23 @@ class ClockCirclePainter extends CustomPainter {
     paint.strokeCap = StrokeCap.round;
     var radius = min(size.height, size.width) / 2;
     canvas.drawCircle(Offset(size.width / 2, size.height / 2), radius, paint);
-    drawHand(canvas, size, dateTime.hour * 30, 4, size.width * 0.25, hoursHand);
-    drawHand(
-        canvas, size, dateTime.minute * 6, 3, size.width * 0.2, minutesHand);
-    drawHand(
-        canvas, size, dateTime.second * 6, 2, size.width * 0.16, secondsHand);
-    canvas.drawCircle(Offset(size.width / 2, size.height / 2),
-        size.width * 0.02, paint..color = secondsHand);
+    //! draw hours hand
+    drawHand(canvas, size, dateTime.hour * 30 + (dateTime.minute ~/ 2), 3,
+        size.width * 0.03, size.width * 0.25, hoursHand);
+
+    //! draw minutes hand
+    drawHand(canvas, size, dateTime.minute * 6 + (dateTime.second ~/ 12), 3,
+        size.width * 0.03, size.width * 0.2, minutesHand);
+
+    //! draw seconds  hand
+    drawHand(canvas, size, dateTime.second * 6, 2, size.width * 0.03,
+        size.width * 0.16, secondsHand);
+    //! draw inner circle
+    canvas.drawCircle(
+      Offset(size.width / 2, size.height / 2),
+      size.width * 0.02,
+      paint..color = secondsHand,
+    );
   }
 
   void drawPainter(

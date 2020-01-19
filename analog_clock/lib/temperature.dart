@@ -71,11 +71,14 @@ class _TemperatureViewState extends State<TemperatureView> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  FittedBox(
-                    child: Text(
-                      "${model.weatherString.toUpperCase()}",
-                      style: TextStyle(
-                          fontSize: model.weatherString.length > 10 ? 15 : 25),
+                  Expanded(
+                    child: FittedBox(
+                      child: Text(
+                        "${model.weatherString.toUpperCase()}",
+                        style: TextStyle(
+                            fontSize:
+                                model.weatherString.length > 10 ? 15 : 25),
+                      ),
                     ),
                   ),
                   Padding(

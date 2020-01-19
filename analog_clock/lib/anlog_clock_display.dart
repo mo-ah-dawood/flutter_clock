@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 
@@ -30,25 +31,35 @@ class _AnalogClockDisplayState extends State<AnalogClockDisplay> {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
-    return CustomPaint(
-      painter: ClockCirclePainter(
-        bigDotColor: theme.brightness == Brightness.dark
-            ? Colors.white54
-            : Colors.black54,
-        mediumDotColor: theme.brightness == Brightness.dark
-            ? Colors.white38
-            : Colors.black38,
-        smallDotColor: theme.brightness == Brightness.dark
-            ? Colors.white24
-            : Colors.black26,
-        secondsHand: Colors.amber,
-        hoursHand: theme.brightness == Brightness.dark
-            ? Colors.white38
-            : Colors.black38,
-        minutesHand: theme.brightness == Brightness.dark
-            ? Colors.white60
-            : Colors.black54,
-      ),
+    return LayoutBuilder(
+      builder: (context, constrains) {
+        return Center(
+          child: SizedBox(
+            width: min(constrains.maxHeight, constrains.maxWidth),
+            height: min(constrains.maxHeight, constrains.maxWidth),
+            child: CustomPaint(
+              painter: ClockCirclePainter(
+                bigDotColor: theme.brightness == Brightness.dark
+                    ? Colors.white54
+                    : Colors.black54,
+                mediumDotColor: theme.brightness == Brightness.dark
+                    ? Colors.white38
+                    : Colors.black38,
+                smallDotColor: theme.brightness == Brightness.dark
+                    ? Colors.white24
+                    : Colors.black26,
+                secondsHand: Colors.amber,
+                hoursHand: theme.brightness == Brightness.dark
+                    ? Colors.white24
+                    : Colors.black26,
+                minutesHand: theme.brightness == Brightness.dark
+                    ? Colors.white60
+                    : Colors.black54,
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
